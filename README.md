@@ -1,2 +1,2 @@
-# draftjs-formik
-DraftJS implementation for Formik. 
+# DraftJS for Formik 
+Coming soon.
