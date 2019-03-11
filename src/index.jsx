@@ -41,6 +41,7 @@ const RichTextEditor = props => (
 
 );
 
+// update this 
 RichTextEditor.propTypes = {
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
