@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 
 export default styled.div`
-    border: 1px solid #DDD;
-    padding: 1rem;
+    border: 2px solid #DDD;
+    border-radius: 5px;
+    box-sizing: border-box;
+    position: relative;
+    max-width: 100%;
 
     [contenteditable] {  
         box-sizing: border-box;

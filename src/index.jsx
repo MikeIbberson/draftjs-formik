@@ -7,13 +7,15 @@ import Wrapper from './components/Wrapper.jsx';
 
 const EditorDOM = React.createRef();
 const RichTextEditor = props => (
-
     <Wrapper>
-        <Tray {...props} editor={EditorDOM} />
-        <Editor
 
+        <Tray
+            {...props}
+            editor={EditorDOM}
+        />
+
+        <Editor
             ref={EditorDOM}
-            spellCheck={true}
             editorState={props.value}
 
             handleKeyCommand={(command, editorState) => {
@@ -37,8 +39,8 @@ const RichTextEditor = props => (
                 })
             )}
         />
-    </Wrapper>
 
+    </Wrapper>
 );
 
 // update this 

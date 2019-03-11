@@ -4,8 +4,16 @@ import styled from 'styled-components';
 import { RichUtils } from 'draft-js';
 import mockTarget from '../helpers/target';
 
+/**
+ * @TODO 
+ * 
+ * Refactor to make the chained loops more readable.
+ * Relying on index position is not easily maintainable.
+ */
+
 const Tray = props => (
     <ButtonsList>
+
         {[props.blockOptions, props.inlineOptions]
             .map((arr, num) => (
                 <ButtonListItem key={num}>
@@ -95,8 +103,7 @@ Tray.defaultProps = {
         { label: 'H4', style: 'header-four' },
         { label: 'H5', style: 'header-five' },
         { label: 'H6', style: 'header-six' },
-        { label: 'UL', style: 'unordered-list-item' },
-        { label: 'OL', style: 'ordered-list-item' }
+        { label: 'List', style: 'unordered-list-item' },
     ],
     inlineOptions: [
         { label: 'Bold', style: 'BOLD' },
@@ -106,14 +113,16 @@ Tray.defaultProps = {
 };
 
 export const ButtonsList = styled.ul`
-    border-bottom: 1px solid #DDD;
+    border-bottom: 2px solid #DDD;
     list-style: none;
     margin: 0 0 1rem;
-    padding: 0 0 1rem;
+    padding: 0.5rem;
 `;
 
 export const ButtonListItem = styled.li`
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     font-size: 1em;
 
     &:not(:first-of-type){ 
@@ -124,10 +133,20 @@ export const ButtonListItem = styled.li`
 export const Button = styled.button`
     background: ${props => props.active ? 'rgba(221, 221, 221, 0.3)' : 'transparent'};
         border: 0;
-    color:  ${props => props.active ? 'blue' : '#DDD'};
+    border-radius: 5px;
+    color:  ${props => props.active ? '#444' : '#AAA'};
         cursor: pointer;
         padding: 0.5rem;
     font-size: inherit;
+    line-height: 1;
+    outline: 0;
+    transition-duration: 500ms;
+    transition-property: background-color, color;
+
+    &:focus, 
+    &:hover {
+        color: #444;
+    }
 `;
 
 export default Tray;
