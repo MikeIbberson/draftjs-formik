@@ -1,39 +1,91 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import Tray, { ButtonListItem, Button } from '../src/components/Tray';
 import { EditorState } from 'draft-js';
+import Enzyme, { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+const props = {
+    value: new EditorState.createEmpty(),
+    name: 'demo'
+};
+
+beforeAll(() => Enzyme.configure({
+    adapter: new Adapter()
+}));
 
 describe('Tray wrapper component', () => {
 
     it('should fail without a value prop', () =>
-        expect(() => renderer.create(<Tray />))
+        expect(() => shallow(<Tray />))
             .toThrow(TypeError));
 
     it('should render successfully with all required props', () => {
-        let el = renderer.create(<Tray
-            name="demo"
-            value={new EditorState.createEmpty()}
+        let wrapper = shallow(<Tray
             onChange={jest.fn}
+            {...props}
         />);
-
-        let instance = el.root;
 
         // expect default options to kick in
-        expect(instance.findAllByType(ButtonListItem)).toHaveLength(2);
-        expect(instance.findAllByType(Button)).toHaveLength(10);
+        // test will fail if defaults get modified
+        expect(wrapper.find(ButtonListItem)).toHaveLength(2);
+        expect(wrapper.find(Button)).toHaveLength(10);
     });
+});
 
-    it('should have a subcomponent that calls the onChange prop', () => {
+describe('Tray block and style subcomponents', () => {
+
+    it('should call the onChange prop', () => {
         let func = jest.fn();
-        let el = renderer.create(<Tray
-            name="events"
-            value={new EditorState.createEmpty()}
+        let wrapper = shallow(<Tray
             onChange={func}
+            {...props}
         />);
 
-        let instance = el.root;
-        instance.findAllByType(Button)[0].props.onMouseDown();
+        wrapper.find(Button).first().simulate('mouseDown');
         expect(func).toHaveBeenCalled();
     });
 
+    it('should call the editor\'s focus method', () => {
+        let focus = jest.fn();
+        let wrapper = shallow(<Tray
+            editor={{ current: { focus } }}
+            {...props}
+        />);
+
+        wrapper.find(Button).first().simulate('mouseUp');
+        expect(focus).toHaveBeenCalled();
+    });
+
+    it('should return null onMouseUp without an editor', () => {
+        let wrapper = shallow(<Tray {...props} />);
+        let btn = wrapper.find(Button).first().prop('onMouseUp');
+        expect(btn()).toEqual(null);
+    });
+
+    it('should throw an error on onMouseDown without an onChange', () => {
+        let wrapper = shallow(<Tray {...props} />);
+        let btn = wrapper.find(Button).first().prop('onMouseDown');
+        expect(() => btn()).toThrow();
+    });
+
+
+    /**  Need to unit test 
+     * Not working and probably not proper.
+     * 
+    it('should activate on mouseDown', () => {
+        let func = jest.fn();
+        let wrapper = shallow(<Tray
+            onChange={func}
+            {...props}
+        />);
+
+        let btn = wrapper.find(Button).first();
+        expect(btn.prop('active')).toBeFalsy();
+        btn.prop('onMouseDown')();
+
+        wrapper.update();
+        expect(wrapper.find(Button).first().prop('active')).toBeTruthy();
+
+    });
+    */
 });

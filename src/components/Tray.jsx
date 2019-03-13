@@ -13,7 +13,6 @@ import mockTarget from '../helpers/target';
 
 const Tray = props => (
     <ButtonsList>
-
         {[props.blockOptions, props.inlineOptions]
             .map((arr, num) => (
                 <ButtonListItem key={num}>
